@@ -1,7 +1,9 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
 from matplotlib import image as mpimg
+from scipy.spatial import distance_matrix
 
 image = mpimg.imread("wroclaw.png")
 plt.imshow(image)
@@ -55,7 +57,7 @@ for i in range(len(attraction_list)):
             [attraction_list[i, 0], attraction_list[j, 0]],
             [attraction_list[i, 1], attraction_list[j, 1]],
             "r-",
-            lw = 0.5
+            lw=0.5,
         )
 
 for i in range(len(attraction_list)):
@@ -67,4 +69,26 @@ for i in range(len(attraction_list)):
         size="8",
     )
 
-plt.show() 
+plt.show()
+
+distance_matrix = distance_matrix(attraction_list, attraction_list)
+
+print(distance_matrix)
+
+graf = nx.from_numpy_array(distance_matrix)
+mapping = {i: name for i, name in enumerate(attraction_names)}
+graf = nx.relabel_nodes(graf, mapping)
+
+
+pos = nx.spring_layout(graf)  # pozycje dla wszystkich wierzchołków
+
+nx.draw_networkx_nodes(graf, pos, node_size=700)
+
+nx.draw_networkx_edges(graf, pos)
+
+nx.draw_networkx_labels(graf, pos, font_size=12, font_family="sans-serif")
+
+edge_labels = nx.get_edge_attributes(graf, "weight")
+nx.draw_networkx_edge_labels(graf, pos, edge_labels=edge_labels, font_size=6)
+
+plt.show()
