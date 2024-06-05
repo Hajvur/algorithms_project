@@ -6,6 +6,7 @@ from matplotlib import image as mpimg
 from scipy.spatial import distance_matrix
 
 from naiwny import naive
+from Held_Karp import held_karp
 
 attraction_names = [
     "dworzec główny",
@@ -108,3 +109,4 @@ if __name__ == "__main__":
     print(G)
     draw_graph(G)
     naive(G)
+    held_karp(attraction_list)

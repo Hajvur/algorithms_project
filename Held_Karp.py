@@ -1,11 +1,9 @@
 from itertools import combinations
-from scipy.spatial import distance_matrix
-from visualisation import attraction_list
 
-distance_matrix = distance_matrix(attraction_list, attraction_list)
 
-def held_karp(distance_matrix):
-    
+def held_karp(attraction_list):
+    from scipy.spatial import distance_matrix
+    distance_matrix = distance_matrix(attraction_list, attraction_list)
     n = len(distance_matrix)
     
     G = {}
@@ -20,9 +18,9 @@ def held_karp(distance_matrix):
             #ustawiamy bity z danej kombinacji jako sciezka, ktora przeszlismy np 1001 oznacza ze bylismy w punkcie 1 i w 4 (liczac od 1)
             bity = 0
             for bit in S:
-                #print(f"bit = {bin(bit)[2:]}")
+                print(f"bit = {bin(bit)[2:]}")
                 bity |= 1 << bit
-                #print(f" bity = {bin(bity)[2:]}")
+                print(f" bity = {bin(bity)[2:]}")
             for k in S:
                 poprzednia_permutacja = bity & ~ (1<<k)
                 
@@ -52,12 +50,10 @@ def held_karp(distance_matrix):
     
     path.append(0)
     
-    print(f"sciezka = {list(reversed(path))}")
-    print(f"min dist  = {min_dist}")
+    #print(f"sciezka = {list(reversed(path))}")
+    #print(f"min dist  = {min_dist}")
                 
 
                 
             
             
-print(f"matrix = {distance_matrix}")
-held_karp(distance_matrix)
