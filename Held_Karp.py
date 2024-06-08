@@ -50,8 +50,8 @@ def held_karp(attraction_list):
     
     path.append(0)
     
-    #print(f"sciezka = {list(reversed(path))}")
-    #print(f"min dist  = {min_dist}")
+    print(f"sciezka = {list(reversed(path))}")
+    print(f"min dist  = {min_dist}")
                 
 
                 
