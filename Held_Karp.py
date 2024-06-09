@@ -1,7 +1,7 @@
 from itertools import combinations
 
 
-def held_karp(distance_matrix):
+def held_karp(distance_matrix, map_names):
     n = len(distance_matrix)
     
     G = {}
@@ -37,6 +37,7 @@ def held_karp(distance_matrix):
     min_dist, parent = min(result)
     
     path = []
+    path.append(0)
     
     for j in range(n-1):
         path.append(parent)
@@ -46,7 +47,9 @@ def held_karp(distance_matrix):
     
     path.append(0)
     
-    print(f"path = {list(reversed(path))}")
+    curr_path = [map_names[i] for i in reversed(path)]
+    
+    print(f"path = {list(reversed(curr_path))}")
     print(f"min dist  = {min_dist}")
                 
 

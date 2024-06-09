@@ -111,7 +111,7 @@ if __name__ == "__main__":
     print("naive")
     naive(G)
     print("Held Karp")
-    held_karp(distance_matrix)
+    held_karp(distance_matrix,attraction_names)
     print("nearest neighbor")
     neighbor(G, distance_matrix)
     print("smallest edge")
