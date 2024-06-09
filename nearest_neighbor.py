@@ -7,7 +7,6 @@ def neighbor(graph, distance_matrix, start_point=None):
             if attraction == "dworzec główny":
                 start_point = attraction
                 end_path.append(start_point)
-
                 break
     else:
         end_path.append(start_point)

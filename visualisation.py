@@ -5,9 +5,10 @@ import numpy as np
 from matplotlib import image as mpimg
 from scipy.spatial import distance_matrix
 
-from naiwny import naive
 from Held_Karp import held_karp
+from naiwny import naive
 from nearest_neighbor import neighbor
+from smallest_edge import smallest_edge
 
 attraction_names = [
     "dworzec główny",
@@ -70,7 +71,6 @@ def graf(attraction_list, attraction_names):
     from scipy.spatial import distance_matrix
 
     distance_matrix = distance_matrix(attraction_list, attraction_list)
-    print(distance_matrix)
     G = nx.from_numpy_array(distance_matrix)
     mapping = {i: name for i, name in enumerate(attraction_names)}
     G = nx.relabel_nodes(G, mapping)
@@ -105,9 +105,14 @@ def draw_graph(G):
 
 
 if __name__ == "__main__":
-    plots(attraction_list, attraction_names)
+    # plots(attraction_list, attraction_names)
     G, distance_matrix = graf(attraction_list, attraction_names)
-    draw_graph(G)
-    # naive(G)
-    # held_karp(attraction_list)
-    # neighbor(G,distance_matrix)
+    # draw_graph(G)
+    print("naive")
+    naive(G)
+    print("Held Karp")
+    held_karp(distance_matrix)
+    print("nearest neighbor")
+    neighbor(G, distance_matrix)
+    print("smallest edge")
+    smallest_edge(G)

@@ -12,22 +12,16 @@ def naive(graph):
     for attraction in list(graph.nodes()):
         if attraction != "dworzec główny":
             list_without_start.append(attraction)
-    print(list_without_start)
 
     for path in itertools.permutations(list_without_start):
         path = ["dworzec główny"] + list(path) + ["dworzec główny"]
-        print(f"path = {path}")
 
         travel_distance = sum(
             graph[path[i - 1]][path[i]]["weight"] for i in range(1, len(path))
         )
-        print(travel_distance)
 
         if travel_distance < min_distance:
             min_distance = travel_distance
             shortest_path = path
 
     print(f"shortest path = {shortest_path}, distance = {min_distance}")
-
-
-# naive(G)
