@@ -23,6 +23,17 @@ attraction_names = [
     "rynek",
     "skytower",
     "opera",
+    "zoo",
+    "panorma racławicka",
+    "muzeum narodowe",
+    "centrum technologii audiowizualnych",
+    "aquapark",
+    "park szczytnicki",
+    "uniwersytet wrocławski",
+    "politechnika wrocławska",
+    "polinka",
+    "muzeum poczty",
+    "plac grunwaldzki"
 ]
 #          wspolrzedne  x    y   jako x,y pikseli obrazu
 attraction_list = np.array(
@@ -36,16 +47,27 @@ attraction_list = np.array(
         [244.1, 216.5],  # rynek
         [109.1, 502.5],  # skytower
         [253.3, 303.9],  # opera
+        [757.1, 312.4],  # zoo
+        [398.7, 207.8],  # panorama raclawicka
+        [434.3, 197.6],  # muzeum narodowe
+        [744.5, 247.7],  # centrum technologii audiowizualnych
+        [249.3, 563.7],  # aquapark
+        [827.1, 137.3],  # park szczytnicki
+        [284.5, 134.1],  # uniwersytet wrocławski
+        [583.0, 228.4],  # politechnika wrocławska
+        [508.2, 276.0],  # polinka
+        [390.0, 245.5],  # muzeum poczty
+        [582.9, 180.8]  # plac grunwaldzki
     ]
 )
 
 
 def plots(attraction_list, attraction_names):
-    # image = mpimg.imread("wroclaw.png")
-    # plt.imshow(image)
-    # plt.show()
-    # # solution = np.arange(attraction_list.shape[0])
-    # plt.imshow(image)
+    image = mpimg.imread("wroclaw.png")
+    plt.imshow(image)
+    plt.show()
+    # solution = np.arange(attraction_list.shape[0])
+    plt.imshow(image)
 
     plt.scatter(attraction_list[:, 0], attraction_list[:, 1])
 
@@ -66,7 +88,7 @@ def plots(attraction_list, attraction_names):
             color="black",
             size="8",
         )
-    plt.gca().invert_yaxis()
+    # plt.gca().invert_yaxis()
     plt.savefig('graf_test.png', transparent=True)
     plt.show()
 
@@ -131,6 +153,29 @@ def path_coordinates(attractions):
             path.append((51.09448052082817,17.019795020806292))
         elif attraction == "opera":
             path.append((51.10558175178294,17.030959447347946))
+        elif attraction == "zoo":
+            path.append((51.10546047455658,17.076281183233014))
+        elif attraction == "panorama racławicka":
+            path.append((51.10981301532243,17.044317107189414))
+        elif attraction == "muzeum narodowe":
+            path.append((51.11073072469882,17.04767540584498))
+        elif attraction == "centrum technologii audiowizualnych":
+            path.append((51.10824249215664,17.07451123731235))
+        elif attraction == "aquapark":
+            path.append((51.09008941443009,17.03251566063438))
+        elif attraction == "park szczytnicki":
+            path.append((51.11370454024076,17.08233940882745))
+        elif attraction == "uniwersytet wrocławski":
+            path.append((51.113955578104644,17.03466319639916))
+        elif attraction == "politechnika wrocławska":
+            path.append((51.10876516242112,17.060111912653156))
+        elif attraction == "polinka":
+            path.append((51.10600826276814,17.05342293740822))
+        elif attraction == "muzeum poczty":
+            path.append((51.108275208826214,17.044330299855616))
+        elif attraction == "plac grunwaldzki":
+            path.append((51.111513675256035,17.06018831777431))
+
     return path
 
 
@@ -159,11 +204,11 @@ def map_visualisation(naive, held_karp, nearest, smallest):
     mapObj.save("output.html")
 
 if __name__ == "__main__":
-    # plots(attraction_list, attraction_names)
+    plots(attraction_list, attraction_names)
     G, distance_matrix = graf(attraction_list, attraction_names)
-    # draw_graph(G)
+    draw_graph(G)
     print("naive")
-    naive(G)
+    # naive(G)
     print("Held Karp")
     held_karp(distance_matrix,attraction_names)
     print("nearest neighbor")
@@ -171,6 +216,6 @@ if __name__ == "__main__":
     print("smallest edge")
     smallest_edge(G)
     map_visualisation(['dworzec główny', 'hydropolis', 'hala stulecia', 'katedra', 'most tumski', 'hala targowa', 'rynek', 'opera', 'skytower', 'dworzec główny'],
-                      ['dworzec główny', 'hydropolis', 'hala stulecia', 'katedra', 'most tumski', 'hala targowa', 'rynek', 'opera', 'skytower', 'dworzec główny'],
-                      ['dworzec główny', 'opera', 'rynek', 'hala targowa', 'most tumski', 'katedra', 'hydropolis', 'hala stulecia', 'skytower', 'dworzec główny'],
-                      ['dworzec główny', 'opera', 'rynek', 'hala targowa', 'most tumski', 'katedra', 'hydropolis', 'hala stulecia', 'skytower', 'dworzec główny'])
+                      held_karp(distance_matrix,attraction_names),
+                      neighbor(G, distance_matrix),
+                      smallest_edge(G))
