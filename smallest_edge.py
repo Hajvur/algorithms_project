@@ -50,4 +50,4 @@ def smallest_edge(graph):
 
     print(path)
     print(dist)
-    return path
+    return path, dist

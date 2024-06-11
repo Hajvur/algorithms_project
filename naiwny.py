@@ -25,3 +25,4 @@ def naive(graph):
             shortest_path = path
 
     print(f"shortest path = {shortest_path}, distance = {min_distance}")
+    return shortest_path, min_distance

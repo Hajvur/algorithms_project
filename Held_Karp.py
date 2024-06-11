@@ -48,10 +48,10 @@ def held_karp(distance_matrix, map_names):
     path.append(0)
     
     curr_path = [map_names[i] for i in reversed(path)]
-    
-    print(f"path = {list(reversed(curr_path))}")
+    curr_path = list(reversed(curr_path))
+    print(f"path = {curr_path}")
     print(f"min dist  = {min_dist}")
-    return list(reversed(curr_path))
+    return curr_path, min_dist
 
                 
             
