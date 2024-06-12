@@ -1,7 +1,7 @@
 import itertools
 from itertools import permutations
 
-from networkx import path_graph
+
 
 
 def naive(graph):
@@ -23,6 +23,7 @@ def naive(graph):
         if travel_distance < min_distance:
             min_distance = travel_distance
             shortest_path = path
-
+    
+    print("_______________Naive Algorithm_______________")
     print(f"shortest path = {shortest_path}, distance = {min_distance}")
     return shortest_path, min_distance

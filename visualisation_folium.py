@@ -1,20 +1,21 @@
-from os import path
+import random
+import time
+
+import folium
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-from matplotlib import image as mpimg
-from scipy.spatial import distance_matrix
-import folium
 from folium.plugins import AntPath
 from folium.raster_layers import ImageOverlay
 from geopy.distance import geodesic
+from matplotlib import image as mpimg
 
 from Held_Karp import held_karp
+from helping_methods import plot_results
 from naiwny import naive
 from nearest_neighbor import neighbor
 from smallest_edge import smallest_edge
-# from helping_methods import monte_carlo
 
 attraction_names = [
     "dworzec główny",
@@ -135,7 +136,7 @@ def graf(coordinates, attraction_names):
     from scipy.spatial import distance_matrix
 
     distance_matrix = calculate_distance_matrix(coordinates)
-    print(distance_matrix)
+    #print(distance_matrix)
     G = nx.from_numpy_array(distance_matrix)
     mapping = {i: name for i, name in enumerate(attraction_names)}
     G = nx.relabel_nodes(G, mapping)
@@ -167,7 +168,43 @@ def draw_graph(G):
         font_size=10,
     )
     plt.show()
+    
+def monte_carlo(attraction_names, coordinates_list, num_iterations):
+    subsets_sizes = [3, 5, 7, 10]
+    results = {size: {"naive": [], "held_karp": [], "nearest_neighbor": [], "smallest_edge": []} for size in subsets_sizes}
 
+    for size in subsets_sizes:
+        for _ in range(num_iterations):
+            subset_names = ["dworzec główny"] + random.sample(attraction_names[1:],(size - 1))
+            subset_indices = [attraction_names.index(name) for name in subset_names]
+            subset_coordinates = coordinates_list[subset_indices]
+
+            G, distance_matrix = graf(subset_coordinates, subset_names)
+            
+            start_time = time.time()
+            naive_path, naive_dist = naive(G)
+            naive_time = time.time() - start_time
+            results[size]["naive"].append(naive_time)
+
+            
+            start_time = time.time()
+            held_karp_path, held_karp_dist = held_karp(distance_matrix, subset_names)
+            held_karp_time = time.time() - start_time
+            results[size]["held_karp"].append(held_karp_time)
+
+            
+            start_time = time.time()
+            nearest_path, nearest_dist = neighbor(G, distance_matrix)
+            nearest_time = time.time() - start_time
+            results[size]["nearest_neighbor"].append(nearest_time)
+
+            
+            start_time = time.time()
+            smallest_path, smallest_dist = smallest_edge(G)
+            smallest_time = time.time() - start_time
+            results[size]["smallest_edge"].append(smallest_time)
+
+    return results, naive_path, held_karp_path, nearest_path, smallest_path 
 
 def path_coordinates(attractions):
     path = []
@@ -180,17 +217,16 @@ def path_coordinates(attractions):
     return path
 
 
-def map_visualisation(attraction_list,naive, held_karp, nearest, smallest):
+def map_visualisation(naive, held_karp, nearest, smallest):
     mapObj = folium.Map(location=[51.11065, 17.035341], zoom_start=13)
     
-    #path_naive = path_coordinates(naive)
+    path_naive = path_coordinates(naive)
     path_held_karp = path_coordinates(held_karp)
     path_nearest = path_coordinates(nearest)
     path_smallest = path_coordinates(smallest)
 
     AntPath(
-        #path_naive,
-        path_held_karp,
+        path_naive,
         delay=400,
         weight=3,
         color="red",
@@ -235,31 +271,22 @@ def map_visualisation(attraction_list,naive, held_karp, nearest, smallest):
 
 if __name__ == "__main__":
     plots(attraction_list, attraction_names)
-    G, distance_matrix = graf(coordinates_list, attraction_names,)
+    results, path_naive, path_held_karp, path_neighbour, path_edge,=monte_carlo(attraction_names, coordinates_list, 10)
+    G, distance_matrix = graf(coordinates_list, attraction_names)
     draw_graph(G)
-    print("naive")
-    # naive(G)
-    print("Held Karp")
-    # held_karp(distance_matrix,attraction_names)
-    print("nearest neighbor")
-    # neighbor(G, distance_matrix)
-    print("smallest edge")
-    # smallest_edge(G)
+    print(results)
+    plot_results(results)
+    #rint("naive")
+    #path_naive, dist_naive = naive(G)
+    #print("Held Karp")
+    #path_held_karp, path_held_karp = held_karp(distance_matrix,attraction_names)
+    #print("nearest neighbor")
+    #path_neighbour, dist_neighbor = neighbor(G, distance_matrix)
+    #print("smallest edge")
+    #path_edge, dist_edge = smallest_edge(G)
     map_visualisation(
-        [
-            "dworzec główny",
-            "hydropolis",
-            "hala stulecia",
-            "katedra",
-            "most tumski",
-            "hala targowa",
-            "rynek",
-            "opera",
-            "skytower",
-            "dworzec główny",
-        ],
-        naive(G),
-        held_karp(distance_matrix, attraction_names),
-        neighbor(G, distance_matrix),
-        smallest_edge(G),
+        path_naive,
+        path_held_karp,
+        path_neighbour,
+        path_edge,
     )
