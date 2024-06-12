@@ -163,56 +163,26 @@ def path_coordinates(attractions):
     return path
 
 
-def map_visualisation(naive, held_karp, nearest, smallest):
-    mapObj = folium.Map(location=[51.11065, 17.035341], zoom_start=13)
+def map_visualisation(path_naive, path_held_karp, path_neighbour, path_edge):
+    paths = [path_naive, path_held_karp, path_neighbour, path_edge]
+    colors = ["red", "blue", "purple", "yellow"]
+    algorithms = ["Naive", "Held-Karp", "Nearest Neighbor", "Smallest Edge"]
 
-    path_naive = path_coordinates(naive)
-    path_held_karp = path_coordinates(held_karp)
-    path_nearest = path_coordinates(nearest)
-    path_smallest = path_coordinates(smallest)
+    for path, color, algorithm in zip(paths, colors, algorithms):
+        mapObj = folium.Map(location=[51.11065, 17.035341], zoom_start=13)
+        path_coords = path_coordinates(path)
 
-    AntPath(
-        path_naive,
-        delay=400,
-        weight=3,
-        color="red",
-        pulse_color="orange",
-        dash_array=[10, 15],
-    ).add_to(mapObj)
-    AntPath(
-        path_held_karp,
-        delay=400,
-        weight=3,
-        color="blue",
-        pulse_color="green",
-        dash_array=[10, 15],
-    ).add_to(mapObj)
-    AntPath(
-        path_nearest,
-        delay=400,
-        weight=3,
-        color="purple",
-        pulse_color="blue",
-        dash_array=[10, 15],
-    ).add_to(mapObj)
-    AntPath(
-        path_smallest,
-        delay=400,
-        weight=3,
-        color="yellow",
-        pulse_color="red",
-        dash_array=[10, 15],
-    ).add_to(mapObj)
-    """
-    ImageOverlay(
-        image="graf_test.png",
-        bounds=[[51.115, 17.015], [51.091, 17.086]],  # Zaktualizuj granice odpowiednio do lokalizacji
-        opacity=1,  # Ustaw przezroczystość obrazu
-        interactive=True,
-        cross_origin=False
-    ).add_to(mapObj)
-    """
-    mapObj.save("output.html")
+        AntPath(
+            path_coords,
+            delay=400,
+            weight=3,
+            color=color,
+            pulse_color="orange",  # You can customize pulse color as desired
+            dash_array=[10, 15],
+            tooltip=algorithm
+        ).add_to(mapObj)
+
+        mapObj.save(f"{algorithm}_output.html")
 
 
 if __name__ == "__main__":
@@ -229,7 +199,7 @@ if __name__ == "__main__":
 
     G, distance_matrix = graf(coordinates_list, attraction_names)
     draw_graph(G)
-    print(results)
+    #print(results)
     from helping_methods import plot_results
 
     plot_results(results)
@@ -241,9 +211,4 @@ if __name__ == "__main__":
     # path_neighbour, dist_neighbor = neighbor(G, distance_matrix)
     # print("smallest edge")
     # path_edge, dist_edge = smallest_edge(G)
-    map_visualisation(
-        path_naive,
-        path_held_karp,
-        path_neighbour,
-        path_edge,
-    )
+    map_visualisation(path_naive,path_held_karp,path_neighbour,path_edge)

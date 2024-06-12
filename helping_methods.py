@@ -77,5 +77,4 @@ def plot_results(results):
         axs[i].legend()
 
     plt.tight_layout()
-    plt.savefig("execution_times.png")
     plt.show()
