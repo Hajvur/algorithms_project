@@ -23,4 +23,4 @@ def naive(graph):
 
     print("_______________Naive Algorithm_______________")
     print(f"shortest path = {shortest_path}, distance = {min_distance}")
-    return shortest_path, min_distance
+    return shortest_path, round(min_distance,2)

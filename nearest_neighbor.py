@@ -39,4 +39,4 @@ def neighbor(graph, distance_matrix, start_point=None):
     print(end_path)
     len_path += graph[start_point]["dworzec główny"]["weight"]
     print(len_path)
-    return end_path, len_path
+    return end_path, round(len_path,2)

@@ -52,7 +52,7 @@ def held_karp(distance_matrix, map_names):
     print("_______________Held-Karp Algorithm_______________")
     print(f"path = {curr_path}")
     print(f"min dist  = {min_dist}")
-    return curr_path, min_dist
+    return curr_path, round(min_dist,2)
 
                 
             
