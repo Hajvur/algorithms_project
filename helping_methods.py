@@ -32,24 +32,24 @@ def monte_carlo(attraction_names, coordinates_list, num_iterations):
 
             G, distance_matrix = graf(subset_coordinates, subset_names)
 
-            start_time = time.time()
+            start_time = time.perf_counter_ns()
             naive_path, naive_dist = naive(G)
-            naive_time = time.time() - start_time
+            naive_time = time.perf_counter_ns() - start_time
             results[size]["naive"].append(naive_time)
 
-            start_time = time.time()
+            start_time = time.perf_counter_ns()
             held_karp_path, held_karp_dist = held_karp(distance_matrix, subset_names)
-            held_karp_time = time.time() - start_time
+            held_karp_time = time.perf_counter_ns() - start_time
             results[size]["held_karp"].append(held_karp_time)
 
-            start_time = time.time()
+            start_time = time.perf_counter_ns()
             nearest_path, nearest_dist = neighbor(G, distance_matrix)
-            nearest_time = time.time() - start_time
+            nearest_time = time.perf_counter_ns() - start_time
             results[size]["nearest_neighbor"].append(nearest_time)
 
-            start_time = time.time()
+            start_time = time.perf_counter_ns()
             smallest_path, smallest_dist = smallest_edge(G)
-            smallest_time = time.time() - start_time
+            smallest_time = time.perf_counter_ns() - start_time
             results[size]["smallest_edge"].append(smallest_time)
 
     return results, naive_path, held_karp_path, nearest_path, smallest_path
@@ -73,7 +73,8 @@ def plot_results(results):
         axs[i].plot(subset_sizes, max_times, label="Max Time", marker="o")
         axs[i].set_title(algo.replace("_", " ").title())
         axs[i].set_xlabel("Subset Size")
-        axs[i].set_ylabel("Time (s)")
+        axs[i].set_ylabel("Time (ns)")
+        axs[i].grid(True)   
         axs[i].legend()
 
     plt.tight_layout()

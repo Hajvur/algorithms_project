@@ -48,6 +48,6 @@ def smallest_edge(graph):
     path.append(start_node)
     dist += graph[curr_node][start_node]["weight"]
     print("_______________Smallest Edge Algorithm_______________")
-    print(path)
-    print(dist)
+    print(f"path = {path}\n")
+    print(f"distance = {round(dist,2)} km")
     return path, round(dist,20)

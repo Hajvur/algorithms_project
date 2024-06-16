@@ -36,7 +36,7 @@ def neighbor(graph, distance_matrix, start_point=None):
 
     end_path.append("dworzec główny")
     print("_______________Nearest Neighbor Algorithm_______________")
-    print(end_path)
+    print(f"path = {end_path}\n")
     len_path += graph[start_point]["dworzec główny"]["weight"]
-    print(len_path)
+    print(f"distance = {round(len_path,2)} km")
     return end_path, round(len_path,2)
