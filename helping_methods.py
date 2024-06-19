@@ -22,11 +22,13 @@ def monte_carlo(attraction_names, coordinates_list, num_iterations):
         }
         for size in subsets_sizes
     }
-    table_data = [] 
+    table_data = []
 
     for size in subsets_sizes:
         for iteration in range(num_iterations):
-            subset_names = ["dworzec główny"] + random.sample(attraction_names[1:], (size - 1))
+            subset_names = ["dworzec główny"] + random.sample(
+                attraction_names[1:], (size - 1)
+            )
             subset_indices = [attraction_names.index(name) for name in subset_names]
             subset_coordinates = [coordinates_list[index] for index in subset_indices]
 
@@ -52,20 +54,51 @@ def monte_carlo(attraction_names, coordinates_list, num_iterations):
             smallest_time = time.perf_counter_ns() - start_time
             results[size]["smallest_edge"].append(smallest_time)
 
-            
             if iteration == num_iterations - 1:
-                table_data.extend([
-                    ["naive", size, "->".join(map(str, subset_indices)) + "->0", naive_time, naive_dist],
-                    ["held_karp", size, "->".join(map(str, subset_indices)) + "->0", held_karp_time, held_karp_dist],
-                    ["nearest_neighbor", size, "->".join(map(str, subset_indices)) + "->0", nearest_time, nearest_dist],
-                    ["smallest_edge", size, "->".join(map(str, subset_indices)) + "->0", smallest_time, smallest_dist]
-                ])
+                table_data.extend(
+                    [
+                        [
+                            "naive",
+                            size,
+                            "->".join(map(str, subset_indices)) + "->0",
+                            naive_time,
+                            naive_dist,
+                        ],
+                        [
+                            "held_karp",
+                            size,
+                            "->".join(map(str, subset_indices)) + "->0",
+                            held_karp_time,
+                            held_karp_dist,
+                        ],
+                        [
+                            "nearest_neighbor",
+                            size,
+                            "->".join(map(str, subset_indices)) + "->0",
+                            nearest_time,
+                            nearest_dist,
+                        ],
+                        [
+                            "smallest_edge",
+                            size,
+                            "->".join(map(str, subset_indices)) + "->0",
+                            smallest_time,
+                            smallest_dist,
+                        ],
+                    ]
+                )
 
-    print(tabulate(table_data, headers=["Algorytm", "próba", "Trasa", "Czas(ns)", "Długość trasy"], tablefmt="pipe"))
+    print(
+        tabulate(
+            table_data,
+            headers=["Algorytm", "próba", "Trasa", "Czas(ns)", "Długość trasy"],
+            tablefmt="pipe",
+        )
+    )
 
     return results, naive_path, held_karp_path, nearest_path, smallest_path
 
-    
+
 def plot_results(results):
     algorithms = ["naive", "held_karp", "nearest_neighbor", "smallest_edge"]
     subset_sizes = [3, 5, 7, 10]
@@ -85,27 +118,26 @@ def plot_results(results):
         axs[i].set_title(algo.replace("_", " ").title())
         axs[i].set_xlabel("Subset Size")
         axs[i].set_ylabel("Time (ns)")
-        axs[i].grid(True)   
+        axs[i].grid(True)
         axs[i].legend()
 
     plt.tight_layout()
     plt.show()
-    
+
     plt.figure(figsize=(10, 6))
 
     for algo in algorithms:
-        if algo != "naive": 
+        if algo != "naive":
             avg_times_all = []
             for size in subset_sizes:
                 avg_time = sum(results[size][algo]) / len(results[size][algo])
                 avg_times_all.append(avg_time)
             plt.plot(subset_sizes, avg_times_all, label=algo)
 
-    
     plt.legend()
-    plt.title('Średnie czasy wykonania algorytmów (bez algorytmu naiwnego)')
-    plt.xlabel('Rozmiar podzbioru')
-    plt.ylabel('Średni czas (ns)')
+    plt.title("Średnie czasy wykonania algorytmów (bez algorytmu naiwnego)")
+    plt.xlabel("Rozmiar podzbioru")
+    plt.ylabel("Średni czas (ns)")
     plt.grid(True)
     plt.tight_layout()
     plt.show()

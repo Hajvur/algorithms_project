@@ -87,9 +87,9 @@ def calculate_distance_matrix(coordinates):
     for i in range(num_points):
         for j in range(num_points):
             if i != j:
-                distance_matrix[i, j] = round(geodesic(
-                    coordinates[i], coordinates[j]
-                ).kilometers, 2)
+                distance_matrix[i, j] = round(
+                    geodesic(coordinates[i], coordinates[j]).kilometers, 2
+                )
 
     return distance_matrix
 
@@ -101,7 +101,7 @@ def plots(attraction_list, attraction_names):
     # solution = np.arange(attraction_list.shape[0])
     plt.imshow(image)
 
-    plt.scatter(attraction_list[:, 0], attraction_list[:, 1], color = "red")
+    plt.scatter(attraction_list[:, 0], attraction_list[:, 1], color="red")
 
     for i in range(len(attraction_list)):
         for j in range(i, len(attraction_list)):
@@ -121,13 +121,13 @@ def plots(attraction_list, attraction_names):
             size="8",
         )
     # plt.gca().invert_yaxis()
-    #plt.savefig("graf_test.png", transparent=True)
+    # plt.savefig("graf_test.png", transparent=True)
     plt.show()
 
 
 def graf(coordinates, attraction_names):
     distance_matrix = calculate_distance_matrix(coordinates)
-    #print(distance_matrix)
+    # print(distance_matrix)
     G = nx.from_numpy_array(distance_matrix)
     mapping = {i: name for i, name in enumerate(attraction_names)}
     G = nx.relabel_nodes(G, mapping)
@@ -135,10 +135,12 @@ def graf(coordinates, attraction_names):
 
 
 def draw_graph(G):
-    pos = nx.spring_layout(G,k=0.3)
+    pos = nx.spring_layout(G, k=0.3)
     edge_labels = nx.get_edge_attributes(G, "weight")
     plt.figure(figsize=(14, 14))
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10, label_pos=0.5,font_color="blue")
+    nx.draw_networkx_edge_labels(
+        G, pos, edge_labels=edge_labels, font_size=10, label_pos=0.5, font_color="blue"
+    )
     nx.draw(
         G,
         pos,
@@ -148,7 +150,6 @@ def draw_graph(G):
         node_size=1000,
         font_size=12,
         width=1,
-        
     )
     plt.show()
 
@@ -181,16 +182,14 @@ def map_visualisation(path_naive, path_held_karp, path_neighbour, path_edge):
             color=color,
             pulse_color="orange",
             dash_array=[10, 15],
-            tooltip=algorithm
+            tooltip=algorithm,
         ).add_to(grupa_algo)
 
         grupa_algo.add_to(mapObj)
 
     for name, coord in zip(attraction_names, coordinates_list):
         folium.Marker(
-            location=coord,
-            popup=name,
-            icon=folium.Icon(color="green")
+            location=coord, popup=name, icon=folium.Icon(color="green")
         ).add_to(mapObj)
 
     folium.LayerControl().add_to(mapObj)
@@ -211,7 +210,7 @@ if __name__ == "__main__":
 
     G, distance_matrix = graf(coordinates_list, attraction_names)
     draw_graph(G)
-    #print(results)
+    # print(results)
     from helping_methods import plot_results
 
     plot_results(results)
@@ -223,4 +222,4 @@ if __name__ == "__main__":
     # path_neighbour, dist_neighbor = neighbor(G, distance_matrix)
     # print("smallest edge")
     # path_edge, dist_edge = smallest_edge(G)
-    map_visualisation(path_naive,path_held_karp,path_neighbour,path_edge)
+    map_visualisation(path_naive, path_held_karp, path_neighbour, path_edge)
