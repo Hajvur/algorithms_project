@@ -55,33 +55,35 @@ def monte_carlo(attraction_names, coordinates_list, num_iterations):
             results[size]["smallest_edge"].append(smallest_time)
 
             if iteration == num_iterations - 1:
+                paths =[naive_path, held_karp_path, nearest_path, smallest_path]
+                path_data = [[attraction_names.index(name) for name in path] for path in paths]
                 table_data.extend(
                     [
                         [
                             "naive",
                             size,
-                            "->".join(map(str, subset_indices)) + "->0",
+                            "->".join(map(str, path_data[0])),
                             naive_time,
                             naive_dist,
                         ],
                         [
                             "held_karp",
                             size,
-                            "->".join(map(str, subset_indices)) + "->0",
+                            "->".join(map(str, path_data[1])),
                             held_karp_time,
                             held_karp_dist,
                         ],
                         [
                             "nearest_neighbor",
                             size,
-                            "->".join(map(str, subset_indices)) + "->0",
+                            "->".join(map(str, path_data[2])),
                             nearest_time,
                             nearest_dist,
                         ],
                         [
                             "smallest_edge",
                             size,
-                            "->".join(map(str, subset_indices)) + "->0",
+                            "->".join(map(str, path_data[3])),
                             smallest_time,
                             smallest_dist,
                         ],
